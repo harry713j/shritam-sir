@@ -29,9 +29,10 @@ const contentSchema: Schema<Content> = new Schema({
 
 export interface Quiz extends Document {
   name: string;
+  subject: string;
   slug: string;
-  redirectLink?: string;
-  originalLink?: string;
+  redirectLink: string;
+  originalLink: string;
   content: Array<Content>;
 }
 
@@ -40,6 +41,10 @@ const quizSchema: Schema<Quiz> = new Schema(
     name: {
       type: String,
       required: [true, "Name is required"],
+    },
+    subject: {
+      type: String,
+      required: [true, "Subject is required"],
     },
     slug: {
       type: String,

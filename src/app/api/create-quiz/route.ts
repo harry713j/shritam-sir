@@ -6,6 +6,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 type CreateQuizBody = {
   name: string;
+  subject: string;
   slug: string;
   content: Content[];
 };
@@ -15,9 +16,10 @@ export async function POST(
 ): Promise<NextResponse<ApiResponse>> {
   await connectDb();
   try {
-    const { name, slug, content }: CreateQuizBody = await request.json();
+    const { name, slug, subject, content }: CreateQuizBody =
+      await request.json();
 
-    if (!name || !slug || content.length === 0) {
+    if (!name || !slug || !subject || content.length === 0) {
       return NextResponse.json(
         {
           success: false,
@@ -47,10 +49,11 @@ export async function POST(
     const randomString = nanoid(16);
     const baseUrl = process.env.PUBLIC_BASE_URL ?? "http://localhost:3000"; // Fallback URL
     const redirectLink = `${baseUrl}/${randomString}`;
-    const originalLink = `${baseUrl}/quiz?slug=${slug}`;
+    const originalLink = `${baseUrl}/quiz/${slug}`;
 
     const quiz = await QuizModel.create({
       name,
+      subject,
       slug,
       redirectLink,
       originalLink,
