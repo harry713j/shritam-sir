@@ -5,4 +5,5 @@ interface ApiResponse {
   message: string;
   quiz?: Quiz;
   quizzes?: Quiz[];
+  originalLink?: string;
 }

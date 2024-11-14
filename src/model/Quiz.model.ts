@@ -29,9 +29,10 @@ const contentSchema: Schema<Content> = new Schema({
 
 export interface Quiz extends Document {
   name: string;
+  subject: string;
   slug: string;
-  redirectLink?: string;
-  originalLink?: string;
+  redirectLink: string;
+  originalLink: string;
   content: Array<Content>;
 }
 
@@ -41,6 +42,10 @@ const quizSchema: Schema<Quiz> = new Schema(
       type: String,
       required: [true, "Name is required"],
     },
+    subject: {
+      type: String,
+      required: [true, "Subject is required"],
+    },
     slug: {
       type: String,
       required: [true, "Slug is required"],
@@ -48,26 +53,12 @@ const quizSchema: Schema<Quiz> = new Schema(
     },
     redirectLink: {
       type: String,
-      // validate: {
-      //   validator: (v: string) =>
-      //     !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}([/?].*)?$/i.test(v),
-      //   message: "Invalid URL format for redirectLink",
-      // },
     },
     originalLink: {
       type: String,
-      // validate: {
-      //   validator: (v: string) =>
-      //     !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}([/?].*)?$/i.test(v),
-      //   message: "Invalid URL format for originalLink",
-      // },
     },
     content: {
       type: [contentSchema],
-      // validate: {
-      //   validator: (arr: Content[]) => arr.length >= 30,
-      //   message: "At least one content item is required",
-      // },
     },
   },
   { timestamps: true }
