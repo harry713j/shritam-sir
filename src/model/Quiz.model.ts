@@ -53,26 +53,12 @@ const quizSchema: Schema<Quiz> = new Schema(
     },
     redirectLink: {
       type: String,
-      // validate: {
-      //   validator: (v: string) =>
-      //     !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}([/?].*)?$/i.test(v),
-      //   message: "Invalid URL format for redirectLink",
-      // },
     },
     originalLink: {
       type: String,
-      // validate: {
-      //   validator: (v: string) =>
-      //     !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}([/?].*)?$/i.test(v),
-      //   message: "Invalid URL format for originalLink",
-      // },
     },
     content: {
       type: [contentSchema],
-      // validate: {
-      //   validator: (arr: Content[]) => arr.length >= 30,
-      //   message: "At least one content item is required",
-      // },
     },
   },
   { timestamps: true }

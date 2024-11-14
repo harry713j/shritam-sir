@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useQuizResult } from "@/context/QuizContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSpringValue, animated } from "@react-spring/web";
 
 type FormValues = {
   chosenOptions: string[];
@@ -30,6 +31,16 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
       chosenOptions: quiz?.content.map(() => ""),
     },
   });
+
+  const opacity = useSpringValue(0, {
+    config: {
+      duration: 1000,
+    },
+  });
+
+  useEffect(() => {
+    opacity.start(1);
+  }, [opacity]);
 
   const getQuiz = useCallback(async () => {
     setIsLoading(true);
@@ -69,15 +80,18 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
   }, [toast, params, getQuiz]);
 
   return (
-    <div className="w-full flex flex-col space-y-12 px-20 py-8">
+    <animated.div
+      style={{ opacity }}
+      className="w-full flex flex-col md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3"
+    >
       {isLoading ? (
         <div className="w-screen h-screen flex justify-center items-center">
           <span className="sr-only">Loading...</span>
-          <LoaderCircle className="w-10 h-10 text-blue-400 animate-spin" />
+          <LoaderCircle className="md:w-10 md:h-10 w-6 h-6 text-blue-400 animate-spin" />
         </div>
       ) : !quiz ? (
-        <div className="w-screen h-screen flex justify-center items-center">
-          <span className="font-medium text-2xl text-slate-500/60">
+        <div className=" h-screen flex flex-col justify-center items-center">
+          <span className="font-medium md:text-2xl text-xl text-slate-500/60">
             No Quiz Found
           </span>
           <span className="text-blue-950/50">
@@ -90,22 +104,22 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
       ) : (
         <>
           <section className="flex flex-col items-center border-b border-slate-400">
-            <h2 className="text-blue-950/80 capitalize font-semibold text-3xl">
+            <h2 className="text-blue-950/80 capitalize font-semibold lg:text-3xl md:text-2xl text-[22px]">
               {quiz.name}
             </h2>
-            <p className="text-blue-950/50 capitalize font-light text-base">{`${quiz.subject} - ${quiz.content.length} questions `}</p>
+            <p className="text-blue-950/50 capitalize font-light lg:text-base md:text-[15px] text-sm">{`${quiz.subject} - ${quiz.content.length} questions `}</p>
           </section>
           <section>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col items-start space-y-6"
+              className="flex flex-col items-start md:space-y-6 space-y-4"
             >
               {quiz.content.map((cont: Content, index) => (
                 <div
                   key={`${index}`}
-                  className="flex flex-col items-start space-y-3"
+                  className="flex flex-col items-start md:space-y-3 space-y-2"
                 >
-                  <p className="text-slate-600 font-semibold text-base">{`${
+                  <p className="text-slate-600 font-semibold md:text-base text-sm">{`${
                     index + 1
                   }. ${cont.question}?`}</p>
                   <Controller
@@ -126,11 +140,11 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                             <RadioGroupItem
                               value={opt}
                               id={`${opt}-${i}`}
-                              className="w-[18px] h-[18px]"
+                              className="w-[18px] h-[18px] "
                             />
                             <Label
                               htmlFor={`${opt}-${i}`}
-                              className="capitalize text-sm text-slate-500 font-medium"
+                              className="capitalize md:text-sm text-xs text-slate-500 font-medium"
                             >
                               {opt}
                             </Label>
@@ -141,7 +155,7 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                   />
 
                   {form.formState.errors.chosenOptions?.[index] && (
-                    <p className="pl-6 font-light text-red-400 text-sm">
+                    <p className="pl-6 font-light text-red-400 md:text-sm text-xs">
                       {form.formState.errors.chosenOptions?.[index].message}
                     </p>
                   )}
@@ -149,7 +163,7 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
               ))}
               <Button
                 type="submit"
-                className="text-base font-semibold capitalize mt-6"
+                className="md:text-base text-sm font-semibold capitalize mt-6"
               >
                 Submit
               </Button>
@@ -157,7 +171,7 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
           </section>
         </>
       )}
-    </div>
+    </animated.div>
   );
 }
 

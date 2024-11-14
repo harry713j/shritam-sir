@@ -14,11 +14,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import { MoveLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { X, Loader2, CirclePlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { QuizCard } from "@/components/QuizCard";
+import Link from "next/link";
+import { useSpringValue, animated } from "@react-spring/web";
 
 function Quiz() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -30,7 +32,15 @@ function Quiz() {
   const { toast } = useToast();
   const router = useRouter();
 
-  console.log(quizzes);
+  const opacity = useSpringValue(0, {
+    config: {
+      duration: 1000,
+    },
+  });
+
+  useEffect(() => {
+    opacity.start(1);
+  }, [opacity]);
 
   const getQuizzes = useCallback(async () => {
     setIsLoading(true);
@@ -74,11 +84,28 @@ function Quiz() {
 
   if (quizzes.length === 0) {
     return (
-      <div className="w-full flex flex-col items-start px-8 py-4 gap-4">
-        <h1 className="text-4xl text-blue-900 font-bold capitalize gap-12">
-          Active Quizzes
-        </h1>
-        <section className="w-full h-screen flex flex-col items-center px-4 py-2 gap-8 ">
+      <animated.div
+        style={{ opacity }}
+        className="w-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
+      >
+        <section>
+          <span>
+            <Link href={"/"}>
+              {/* <Image src="" alt="logo" /> */}
+              <p className="text-2xl italic font-semibold">ShritamSir</p>
+            </Link>
+          </span>
+        </section>
+        <div className="w-full flex items-center justify-between md:px-4 px-0">
+          <h1 className="xl:text-3xl md:text-[27px] sm:text-2xl text-xl text-blue-950 font-bold capitalize xl:gap-12 md:gap-8 gap-6">
+            Active Quizzes
+          </h1>
+          <span className="flex items-center font-medium md:text-sm text-xs md:space-x-2 space-x-1 transition ease-linear text-sky-600 border-b border-sky-700/0 hover:border-sky-700/100 hover:text-sky-700">
+            <MoveLeft className="w-4 h-4" />
+            <Link href={"/"}>Back to Home</Link>
+          </span>
+        </div>
+        <section className="w-full h-screen flex flex-col items-center xl:px-4 md:py-2 px-0 py-1 gap-4 md:gap-8 ">
           {isLoading ? (
             <div className="w-full h-full flex items-center justify-center">
               <span className="sr-only">Loading...</span>
@@ -88,7 +115,7 @@ function Quiz() {
             <>
               <div className=" h-screen flex justify-center items-center">
                 <span className="font-medium text-2xl text-slate-500/60">
-                  No Quiz Found
+                  No Live Quiz
                 </span>
               </div>
               <div>
@@ -99,7 +126,7 @@ function Quiz() {
                       className="border-green-400 hover:bg-green-100"
                     >
                       <CirclePlus className="w-5 h-5 stroke-2 text-green-400" />
-                      <span className="text-base capitalize font-semibold tracking-wide text-green-400">
+                      <span className="md:text-base text-sm capitalize font-semibold tracking-wide text-green-400">
                         Create new Quiz
                       </span>
                     </Button>
@@ -108,11 +135,11 @@ function Quiz() {
                     <AlertDialogHeader>
                       <div className="flex justify-between items-center">
                         <AlertDialogTitle>Verification</AlertDialogTitle>
-                        <AlertDialogCancel className="w-8 h-8">
+                        <AlertDialogCancel className="md:w-8 md:h-8 w-6 h-6">
                           <X className="text-red-400" />
                         </AlertDialogCancel>
                       </div>
-                      <AlertDialogDescription>
+                      <AlertDialogDescription className="md:text-sm text-xs">
                         If you are Shritam Mohanty, please submit your secrete
                         code
                       </AlertDialogDescription>
@@ -126,6 +153,7 @@ function Quiz() {
                             setCode(e.target.value)
                           }
                           placeholder="Secrete Code"
+                          className="placeholder:text-sm"
                         />
                       </div>
                       <Button size="sm" className="px-3" onClick={onSubmit}>
@@ -133,7 +161,7 @@ function Quiz() {
                       </Button>
                     </div>
                     {verificationErrorMessage && (
-                      <p className="text-red-400 text-sm">
+                      <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
                         {verificationErrorMessage}
                       </p>
                     )}
@@ -143,25 +171,42 @@ function Quiz() {
             </>
           )}
         </section>
-      </div>
+      </animated.div>
     );
   }
 
   return (
-    <div className="w-full flex flex-col items-start px-8 py-4 gap-4">
-      <h1 className="text-4xl text-blue-900 font-bold capitalize gap-12">
-        Active Quizzes
-      </h1>
+    <animated.div
+      style={{ opacity }}
+      className="w-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
+    >
+      <section>
+        <span>
+          <Link href={"/"}>
+            {/* <Image src="" alt="logo" /> */}
+            <p className="text-2xl italic font-semibold">ShritamSir</p>
+          </Link>
+        </span>
+      </section>
+      <div className="w-full flex items-center justify-between md:px-4 px-0">
+        <h1 className="xl:text-3xl md:text-[27px] sm:text-2xl text-xl text-blue-950 font-bold capitalize xl:gap-12 md:gap-8 gap-6">
+          Active Quizzes
+        </h1>
+        <span className="flex items-center font-medium md:text-sm text-xs md:space-x-2 space-x-1 transition ease-linear text-sky-600 border-b border-sky-700/0 hover:border-sky-700/100 hover:text-sky-700">
+          <MoveLeft className="w-4 h-4" />
+          <Link href={"/"}>Back to Home</Link>
+        </span>
+      </div>
 
-      <section className="w-full h-screen flex flex-col items-center px-4 py-2 gap-8 ">
+      <section className="w-full h-screen flex flex-col items-center xl:px-4 md:py-2 px-0 py-1 gap-4 md:gap-8 ">
         {isLoading ? (
           <div className="w-full h-full flex items-center justify-center">
             <span className="sr-only">Loading...</span>
-            <Loader2 className="text-blue-400 w-10 h-10 animate-spin" />
+            <Loader2 className="text-blue-400 md:w-10 md:h-10 w-6 h-6 animate-spin" />
           </div>
         ) : (
           <>
-            <div className="w-[80%] flex flex-col items-center gap-6 ">
+            <div className="md:w-[90%] w-full flex flex-col items-center gap-6 ">
               {quizzes?.map((quiz: Quiz, index: number) => (
                 <QuizCard
                   key={index}
@@ -182,20 +227,20 @@ function Quiz() {
                     className="border-green-400 hover:bg-green-100"
                   >
                     <CirclePlus className="w-5 h-5 stroke-2 text-green-400" />
-                    <span className="text-base capitalize font-semibold tracking-wide text-green-400">
+                    <span className="md:text-base text-sm capitalize font-semibold tracking-wide text-green-400">
                       Create new Quiz
                     </span>
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="sm:max-w-md">
+                <AlertDialogContent className="sm:max-w-md max-w-[320px]">
                   <AlertDialogHeader>
                     <div className="flex justify-between items-center">
                       <AlertDialogTitle>Verification</AlertDialogTitle>
-                      <AlertDialogCancel className="w-8 h-8">
+                      <AlertDialogCancel className="md:w-8 md:h-8 w-6 h-6">
                         <X className="text-red-400" />
                       </AlertDialogCancel>
                     </div>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="md:text-sm text-xs">
                       If you are Shritam Mohanty, please submit your secrete
                       code
                     </AlertDialogDescription>
@@ -209,6 +254,7 @@ function Quiz() {
                           setCode(e.target.value)
                         }
                         placeholder="Secrete Code"
+                        className="placeholder:text-sm"
                       />
                     </div>
                     <Button size="sm" className="px-3" onClick={onSubmit}>
@@ -216,7 +262,7 @@ function Quiz() {
                     </Button>
                   </div>
                   {verificationErrorMessage && (
-                    <p className="text-red-400 text-sm">
+                    <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
                       {verificationErrorMessage}
                     </p>
                   )}
@@ -226,7 +272,7 @@ function Quiz() {
           </>
         )}
       </section>
-    </div>
+    </animated.div>
   );
 }
 

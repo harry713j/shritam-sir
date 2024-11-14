@@ -103,80 +103,83 @@ function QuizCard(props: QuizCardProps) {
   };
 
   return (
-    <Card className="w-full px-4 py-2 border-blue-300/70">
+    <Card className="w-full md:px-4 md:py-2 px-1.5 py-1 border-blue-300/70">
       <CardContent className="">
-        <div className="w-full flex items-center justify-between ">
-          <section className="flex flex-col items-start justify-stretch gap-3">
+        <div className="w-full flex md:flex-row items-center justify-between ">
+          <section className="w-full flex flex-col items-start justify-stretch md:gap-3 gap-2">
             <div className="flex flex-col items-start ">
-              <h2 className="text-xl capitalize font-semibold text-blue-800">
+              <h2 className="md:text-xl text-lg capitalize font-semibold text-blue-800">
                 {props.name}
               </h2>
-              <span className="text-sm capitalize font-light text-blue-800/70">
+              <span className="md:text-sm text-xs capitalize font-light text-blue-800/70">
                 {props.subject}
               </span>
             </div>
-            <Button
-              className="font-medium tracking-wide capitalize text-sm"
-              onClick={() => router.push(props.originalLink)}
-            >
-              Attempt Quiz
-            </Button>
-          </section>
-          <section className="flex items-center justify-between">
-            <Button variant="ghost" onClick={copyToClipboard}>
-              {isUrlCopied ? (
-                <Check className="text-green-400" />
-              ) : (
-                <Copy className="text-blue-400" />
-              )}
-            </Button>
-            <Button variant="ghost" onClick={handleShare}>
-              <Forward className="text-green-500" />
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant={"ghost"}>
-                  <Trash2 className="text-red-400" />
+            <section className="w-full flex items-center justify-between ">
+              <Button
+                className="font-medium tracking-wide capitalize md:text-sm text-xs"
+                onClick={() => router.push(props.originalLink)}
+              >
+                Take Quiz
+              </Button>
+              <div>
+                <Button variant="ghost" onClick={copyToClipboard}>
+                  {isUrlCopied ? (
+                    <Check className="text-green-400" />
+                  ) : (
+                    <Copy className="text-blue-400" />
+                  )}
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <div className="flex items-center justify-between">
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogCancel className="w-8 h-8">
-                      <X className="text-red-300" />
-                    </AlertDialogCancel>
-                  </div>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this Quiz.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <div className="flex items-center space-x-4">
-                  <Input
-                    value={code}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setCode(e.target.value)
-                    }
-                    placeholder="Secrete Code"
-                  />
+                <Button variant="ghost" onClick={handleShare}>
+                  <Forward className="text-green-500" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant={"ghost"}>
+                      <Trash2 className="text-red-400" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <div className="flex items-center justify-between">
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogCancel className="md:w-8 md:h-8 w-6 h-6">
+                          <X className="text-red-300" />
+                        </AlertDialogCancel>
+                      </div>
+                      <AlertDialogDescription className="md:text-sm text-xs">
+                        This action cannot be undone. This will permanently
+                        delete this Quiz.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="flex items-center md:space-x-4 space-x-2">
+                      <Input
+                        value={code}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setCode(e.target.value)
+                        }
+                        placeholder="Secrete Code"
+                        className="placeholder:text-sm"
+                      />
 
-                  <Button
-                    onClick={() => onQuizDelete(code)}
-                    className="bg-red-500 hover:bg-red-600"
-                  >
-                    Delete
-                  </Button>
-                </div>
-                {verificationErrorMessage && (
-                  <p className="text-red-400 text-sm">
-                    {verificationErrorMessage}
-                  </p>
-                )}
-              </AlertDialogContent>
-            </AlertDialog>
+                      <Button
+                        onClick={() => onQuizDelete(code)}
+                        className="bg-red-500 hover:bg-red-600 text-xs md:text-sm"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                    {verificationErrorMessage && (
+                      <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
+                        {verificationErrorMessage}
+                      </p>
+                    )}
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </section>
           </section>
         </div>
       </CardContent>

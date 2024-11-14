@@ -11,6 +11,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useQuizResult } from "@/context/QuizContext";
 import { Content } from "@/model/Quiz.model";
 import Link from "next/link";
+import { useSpringValue, animated } from "@react-spring/web";
 
 function ResultPage() {
   const { quiz, score, chosenOptions, calculateScore } = useQuizResult();
@@ -25,6 +26,16 @@ function ResultPage() {
     },
   } satisfies ChartConfig;
 
+  const opacity = useSpringValue(0, {
+    config: {
+      duration: 1000,
+    },
+  });
+
+  useEffect(() => {
+    opacity.start(1);
+  }, [opacity]);
+
   useEffect(() => {
     calculateScore(correctAnswer);
   }, [calculateScore, correctAnswer]);
@@ -34,11 +45,14 @@ function ResultPage() {
     : 0;
 
   return (
-    <div className="flex flex-col items-start px-20 py-8 space-y-12">
-      <h1 className="text-4xl text-blue-950 capitalize font-bold">
+    <animated.div
+      style={{ opacity }}
+      className="flex flex-col items-start md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3"
+    >
+      <h1 className="lg:text-4xl md:text-[2rem] sm:text-3xl text-2xl text-blue-950 capitalize font-bold">
         Your Score
       </h1>
-      <section className="w-full flex items-center justify-center space-x-12">
+      <section className="w-full flex md:flex-row flex-col md:items-center md:justify-center md:space-x-12">
         <div>
           <ChartContainer
             config={chartConfig}
@@ -102,7 +116,7 @@ function ResultPage() {
           </ChartContainer>
         </div>
         <div className="flex flex-col items-start space-y-2">
-          <h2 className="text-2xl text-slate-600 font-semibold">
+          <h2 className="text-2xl md:text-3xl text-slate-600 font-semibold">
             {scorePercentage === 100
               ? "Perfect Score!"
               : scorePercentage > 84
@@ -118,12 +132,12 @@ function ResultPage() {
               : "Poor!"}
           </h2>
           <div className="flex flex-col space-y-4">
-            <p className="text-base text-slate-600/70 font-medium">
+            <p className="md:text-base text-sm text-slate-600/70 font-medium">
               You have scored {`${score} / ${quiz?.content.length}.`}
             </p>
             <span className="bg-blue-500 transition-colors ease-in rounded-[3px] flex justify-center px-3 py-1.5 hover:bg-blue-600">
               <Link
-                className="text-white text-sm font-semibold capitalize"
+                className="text-white md:text-sm text-xs font-semibold capitalize"
                 href={`/quiz`}
               >
                 Try other quiz
@@ -134,17 +148,19 @@ function ResultPage() {
       </section>
       <section className="flex flex-col items-start space-y-6">
         <div className="flex flex-col items-start">
-          <h2 className="text-2xl text-slate-600 font-semibold">Answers</h2>
+          <h2 className="md:text-2xl text-xl text-slate-600 font-semibold">
+            Answers
+          </h2>
           <span className="flex items-center space-x-4">
             <section className="flex items-center space-x-1">
               <span className="inline-block w-3 h-3 bg-green-400 border-[0.5px] border-slate-400"></span>
-              <p className="text-sm font-light text-slate-500/70 capitalize">
+              <p className="md:text-sm text-xs font-light text-slate-500/70 capitalize">
                 Correct answer
               </p>
             </section>
             <section className="flex items-center space-x-1">
               <span className="inline-block w-3 h-3 border-[0.5px] border-slate-400 bg-red-400"></span>
-              <p className="text-sm font-light text-slate-500/70 capitalize">
+              <p className="md:text-sm text-xs font-light text-slate-500/70 capitalize">
                 wrong answer by you
               </p>
             </section>
@@ -153,12 +169,12 @@ function ResultPage() {
         {quiz?.content.map((cont: Content, index) => (
           <div
             key={`${index}`}
-            className="w-full flex flex-col items-start space-y-3"
+            className="w-full flex flex-col items-start md:space-y-3 space-y-2"
           >
-            <p className="text-slate-600 font-semibold text-base">{`${
+            <p className="text-slate-600 font-semibold md:text-base text-sm">{`${
               index + 1
             }. ${cont.question}?`}</p>
-            <div className="w-full flex flex-col items-start pl-6 space-y-1 ">
+            <div className="w-full flex flex-col items-start md:pl-6 pl-4 space-y-1 ">
               {cont.options.map((opt: string, optIndex) => (
                 <span
                   key={`${opt}-${optIndex}`}
@@ -178,7 +194,7 @@ function ResultPage() {
                         chosenOptions[index] !== correctAnswer?.[index])
                         ? "text-slate-100"
                         : "text-slate-500"
-                    } text-base font-medium `}
+                    } md:text-sm text-xs font-medium `}
                   >
                     {optIndex === 0
                       ? "a)"
@@ -195,7 +211,7 @@ function ResultPage() {
                         chosenOptions[index] !== correctAnswer?.[index])
                         ? "text-slate-100"
                         : "text-slate-500"
-                    }  text-base font-medium capitalize`}
+                    }  md:text-sm text-xs font-medium capitalize`}
                   >
                     {opt}
                   </p>
@@ -205,7 +221,7 @@ function ResultPage() {
           </div>
         ))}
       </section>
-    </div>
+    </animated.div>
   );
 }
 

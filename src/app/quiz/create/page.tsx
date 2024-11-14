@@ -30,6 +30,7 @@ import {
 import { type Quiz } from "@/model/Quiz.model";
 import { Plus, Trash, Loader2, X, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSpringValue, animated } from "@react-spring/web";
 
 type ContentType = {
   question: string;
@@ -69,6 +70,16 @@ function CreatePage() {
     control: form.control,
     name: "content",
   });
+
+  const opacity = useSpringValue(0, {
+    config: {
+      duration: 1000,
+    },
+  });
+
+  useEffect(() => {
+    opacity.start(1);
+  }, [opacity]);
 
   const onSubmit: SubmitHandler<CreateQuizType> = async (
     data: CreateQuizType
@@ -155,17 +166,20 @@ function CreatePage() {
   }, [form.watch, form.setValue, transformSlug, form]);
 
   return (
-    <div className="px-20 py-8">
+    <animated.div
+      style={{ opacity }}
+      className="relative xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 "
+    >
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/2 flex flex-col items-start space-y-12 "
+        className="lg:w-1/2 sm:w-[70%] flex flex-col items-start md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 z-10"
       >
-        <div className="w-full flex flex-col items-start space-y-4 ">
+        <div className="w-full flex flex-col items-start md:space-y-4 space-y-2">
           <section className="w-full flex flex-col items-start space-y-1">
             <span className="w-full flex flex-col items-start space-y-2">
               <Label
                 htmlFor="name"
-                className="text-base font-medium text-slate-600 capitalize"
+                className="md:text-base text-sm font-medium text-slate-600 capitalize"
               >
                 Name of Quiz
               </Label>
@@ -173,10 +187,11 @@ function CreatePage() {
                 id="name"
                 placeholder="Quiz Name"
                 {...form.register("name", { required: "Name is required" })}
+                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
               />
             </span>
             {form.formState.errors.name && (
-              <p className="text-red-400 text-sm pl-2 font-light">
+              <p className="text-red-400 md:text-sm text-[11px] pl-2 font-light">
                 {form.formState.errors.name.message}
               </p>
             )}
@@ -185,7 +200,7 @@ function CreatePage() {
             <span className="w-full flex flex-col items-start space-y-2">
               <Label
                 htmlFor="subject"
-                className="text-base font-medium text-slate-600 capitalize"
+                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
               >
                 Subject
               </Label>
@@ -195,10 +210,11 @@ function CreatePage() {
                 {...form.register("subject", {
                   required: "Subject is required",
                 })}
+                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
               />
             </span>
             {form.formState.errors.subject && (
-              <p className="text-red-400 text-sm pl-2 font-light">
+              <p className="text-red-400 md:text-sm text-[11px] pl-2 font-light">
                 {form.formState.errors.subject.message}
               </p>
             )}
@@ -207,7 +223,7 @@ function CreatePage() {
             <span className="w-full flex flex-col items-start space-y-2">
               <Label
                 htmlFor="slug"
-                className="text-base font-medium text-slate-600 capitalize"
+                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
               >
                 Slug
               </Label>
@@ -215,11 +231,12 @@ function CreatePage() {
                 id="slug"
                 placeholder="Quiz Slug"
                 {...form.register("slug", { required: "Slug is required" })}
+                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
                 disabled
               />
             </span>
             {form.formState.errors.slug && (
-              <p className="text-red-400 text-sm pl-2 font-light">
+              <p className="text-red-400 md:text-sm text-[11px] pl-2 font-light">
                 {form.formState.errors.slug.message}
               </p>
             )}
@@ -237,7 +254,7 @@ function CreatePage() {
                     <div className="w-full flex items-center justify-between">
                       <Label
                         htmlFor={`question.${index}`}
-                        className="text-base font-medium text-slate-600 capitalize"
+                        className="md:text-base text-sm font-medium text-slate-600 capitalize"
                       >
                         Question No.{index + 1}
                       </Label>
@@ -255,17 +272,18 @@ function CreatePage() {
                       {...form.register(`content.${index}.question`, {
                         required: "Question is required",
                       })}
+                      className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
                     />
                   </span>
                   {form.formState.errors?.content?.[index]?.question && (
-                    <p className="text-red-400 text-sm pl-2 font-light">
+                    <p className="text-red-400 md:text-sm text-[11px] pl-2 font-light">
                       {form.formState.errors.content[index]?.question.message}
                     </p>
                   )}
                 </section>
                 <section className="w-full flex flex-col items-start space-y-1">
                   <span className="w-full flex flex-col items-start space-y-2">
-                    <p className="text-base font-medium text-slate-600 capitalize">
+                    <p className="md:text-base text-sm font-medium text-slate-600 capitalize">
                       Options
                     </p>
                     {[0, 1, 2, 3].map((optIndex) => (
@@ -285,11 +303,12 @@ function CreatePage() {
                               )} is required`,
                             }
                           )}
+                          className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
                         />
                         {form.formState.errors?.content?.[index]?.options?.[
                           optIndex
                         ] && (
-                          <p className="text-red-400 text-xs pl-2 font-light">
+                          <p className="text-red-400 md:text-xs text-[10px] pl-2 font-light">
                             {
                               form.formState.errors?.content?.[index]
                                 ?.options?.[optIndex].message
@@ -302,7 +321,7 @@ function CreatePage() {
                 </section>
                 <section className="w-full flex flex-col items-start space-y-1">
                   <span className="w-full flex flex-col items-start space-y-2">
-                    <Label className="text-base font-medium text-slate-600 capitalize">
+                    <Label className="md:text-base text-sm font-medium text-slate-600 capitalize">
                       Answer
                     </Label>
                     <Controller
@@ -317,7 +336,10 @@ function CreatePage() {
                             }
                           >
                             <SelectTrigger className="">
-                              <SelectValue placeholder="Select correct Options" />
+                              <SelectValue
+                                className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
+                                placeholder="Select correct Options"
+                              />
                             </SelectTrigger>
                             <SelectContent>
                               {[0, 1, 2, 3].map((optIndex) => (
@@ -331,7 +353,7 @@ function CreatePage() {
                             </SelectContent>
                           </Select>
                           {formState.errors.content?.[index]?.answer && (
-                            <p className="text-red-400 text-sm pl-2 font-light">
+                            <p className="text-red-400 md:text-sm text-[11px] pl-2 font-light">
                               {
                                 formState.errors.content?.[index]?.answer
                                   .message
@@ -411,7 +433,7 @@ function CreatePage() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </div>
+    </animated.div>
   );
 }
 

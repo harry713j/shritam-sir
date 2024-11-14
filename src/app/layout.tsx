@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { QuizProvider } from "@/context/QuizContext";
+import { Footer } from "@/components/Footer";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Shritam Sir",
@@ -29,10 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <QuizProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <main>{children}</main>
+        <body className={openSans.className}>
+          <main>
+            {children}
+            <Footer />
+          </main>
           <Toaster />
         </body>
       </QuizProvider>
