@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { QuizCard } from "@/components/QuizCard";
 import Link from "next/link";
 import { useSpringValue, animated } from "@react-spring/web";
+import Image from "next/image";
 
 function Quiz() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -89,10 +90,16 @@ function Quiz() {
         className="w-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
       >
         <section>
-          <span>
-            <Link href={"/"}>
-              {/* <Image src="" alt="logo" /> */}
-              <p className="text-2xl italic font-semibold">ShritamSir</p>
+          <span className="inline-block xl:w-[240px]  md:w-[200px] w-[180px] ">
+            <Link href={"/"} className="w-full h-full">
+              <Image
+                src="/main_logo.svg"
+                width={240}
+                height={240}
+                layout="responsive"
+                alt="logo"
+                className="w-full h-full"
+              />
             </Link>
           </span>
         </section>
@@ -181,10 +188,16 @@ function Quiz() {
       className="w-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
     >
       <section>
-        <span>
-          <Link href={"/"}>
-            {/* <Image src="" alt="logo" /> */}
-            <p className="text-2xl italic font-semibold">ShritamSir</p>
+        <span className="inline-block xl:w-[240px]  md:w-[200px] w-[180px] ">
+          <Link href={"/"} className="w-full h-full">
+            <Image
+              src="/main_logo.svg"
+              width={240}
+              height={240}
+              layout="responsive"
+              alt="logo"
+              className="w-full h-full"
+            />
           </Link>
         </span>
       </section>
