@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Instagram, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
-import { animated, useSpring, useSpringValue } from "@react-spring/web";
+import { animated, useSpringValue } from "@react-spring/web";
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -51,24 +51,31 @@ export default function Home() {
 
       <div className="z-10 flex flex-col  md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8">
         <section>
-          <span>
-            <Link href={"/"}>
-              {/* <Image src="" alt="logo" /> */}
-              <p className="text-2xl italic font-semibold">ShritamSir</p>
+          <span className="inline-block xl:w-[240px]  md:w-[200px] w-[180px] ">
+            <Link href={"/"} className="w-full h-full">
+              <Image
+                src="/main_logo.svg"
+                width={240}
+                height={240}
+                layout="responsive"
+                alt="logo"
+                className="w-full h-full"
+              />
             </Link>
           </span>
         </section>
         <section className="flex sm:flex-row flex-col-reverse items-center xl:items-start sm:justify-around ">
           <div className="xl:w-2/5 md:w-1/2 mt-4 flex flex-col xl:py-6 py-4 px-2 space-y-4">
-            <h1 className="xl:text-4xl md:text-[2rem] text-3xl font-semibold text-pink-200">
+            <h1 className="xl:text-4xl md:text-[2rem] text-3xl font-semibold text-pink-100">
               Teaching Philosophy
             </h1>
-            <p className="font-normal xl:text-base md:text-[15px] text-sm text-pink-200 select-none">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Animi
-              exercitationem officiis dicta quis maxime, soluta non veniam ipsa
-              ducimus illo? Quas maxime minima vero sit cum, harum quia est
-              ea?orem, ipsum dolor sit amet consectetur adipisicing elit. Animi
-              exercitationem officiis dicta quis maxime
+            <p className="font-normal xl:text-base md:text-[15px] text-sm text-pink-100 select-none">
+              I believe in fostering a supportive, inclusive environment where
+              students feel empowered to explore, question, and grow. By
+              adapting to diverse learning styles, encouraging critical
+              thinking, and cultivating curiosity, I aim to inspire lifelong
+              learners who value collaboration, empathy, and resilience in both
+              their academic journey and personal development.
             </p>
             <div className="relative overflow-hidden flex items-center justify-center cursor-pointer ease-in-out xl:w-2/5 w-1/2 px-3 py-1.5 rounded mt-4 transition-all  bg-orange-500 group">
               <span className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-orange-400  rounded-md group-hover:translate-x-0"></span>
@@ -81,9 +88,15 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <span>
-              {/* <Image src="" alt="picture" /> */}
-              <span className="inline-block xl:w-[320px] xl:h-[320px] md:w-[280px] md:h-[280px]  w-[240px] h-[240px] rounded-full bg-gray-300"></span>
+            <span className="inline-block xl:w-[320px] xl:h-[320px] md:w-[280px] md:h-[280px]  w-[240px] h-[240px] rounded-full overflow-hidden">
+              <Image
+                src="/main_pic.svg"
+                width={320}
+                height={320}
+                // className="w-full h-full"
+                layout="responsive"
+                alt="picture"
+              />
             </span>
           </div>
         </section>
@@ -114,7 +127,7 @@ export default function Home() {
             </span>
             <span className="border border-red-700 shadow-lg flex items-center justify-center p-1.5 rounded-full bg-[#BB001B]">
               <a
-                href="www.gmail.com"
+                href="mailto:shritammohanty898@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block text-white w-5 h-5"
