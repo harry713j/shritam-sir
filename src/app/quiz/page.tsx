@@ -2,7 +2,6 @@
 import type { Quiz } from "@/model/Quiz.model";
 import React, { useCallback, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { useToast } from "@/hooks/use-toast";
 import { ApiResponse } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +29,6 @@ function Quiz() {
   const [verificationErrorMessage, setVerificationErrorMessage] = useState<
     string | undefined
   >();
-  const { toast } = useToast();
   const router = useRouter();
 
   const opacity = useSpringValue(0, {
@@ -54,14 +52,10 @@ function Quiz() {
     } catch (error) {
       console.error("Error fetching the quizzes", error);
       const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Uh oh! Something went wrong",
-        description: axiosError.response?.data.message,
-        variant: "destructive",
-      });
+
       setIsLoading(false);
     }
-  }, [toast]);
+  }, []);
 
   const onSubmit = () => {
     // if the code is correct then push to create quiz page if wrong then show error message
