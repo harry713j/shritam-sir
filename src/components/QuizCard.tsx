@@ -12,11 +12,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Copy, Forward, Trash2, Check, X } from "lucide-react";
+import { Copy, Forward, Trash2, Check, X, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import axios, { AxiosError } from "axios";
-import { ApiResponse } from "@/types/types";
+import { ApiResponse, VerificationCodeType } from "@/types/types";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 type QuizCardProps = {
   className?: string;
@@ -32,37 +33,58 @@ function QuizCard(props: QuizCardProps) {
   const { toast } = useToast();
   const router = useRouter();
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
-
-  const [code, setCode] = useState<string>("");
+  const [isVerificationLoading, setIsVerificationLoading] =
+    useState<boolean>(false);
   const [verificationErrorMessage, setVerificationErrorMessage] = useState<
     string | undefined
   >();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const form = useForm<VerificationCodeType>({
+    defaultValues: {
+      code: "",
+    },
+  });
 
-  const onQuizDelete = async (verificationCode: string) => {
-    if (verificationCode === process.env.NEXT_PUBLIC_SHRITAM_SECRETE_KEY) {
-      try {
-        const response = await axios.delete<ApiResponse>(
-          `/api/delete-quiz?slug=${props.slug}`
-        );
-
-        if (response.data) {
-          toast({
-            title: `Successfully Deleted ${props.name}`,
-            description: response.data.message,
-          });
-          props.onDelete();
+  const onQuizDelete = async (data: VerificationCodeType) => {
+    setIsVerificationLoading(true);
+    try {
+      const verificationResponse = await axios.post<ApiResponse>(
+        `/api/verify-secrete-key`,
+        {
+          secreteKey: data.code,
         }
-      } catch (error) {
-        console.error("Error delete the quiz", error);
-        const axiosError = error as AxiosError<ApiResponse>;
-        toast({
-          variant: "destructive",
-          title: `Unable to delete the quiz ${props.name}`,
-          description: axiosError.response?.data.message,
-        });
+      );
+
+      if (verificationResponse.data) {
+        try {
+          const response = await axios.delete<ApiResponse>(
+            `/api/delete-quiz?slug=${props.slug}`
+          );
+
+          if (response.data) {
+            toast({
+              title: `Successfully Deleted ${props.name}`,
+              description: response.data.message,
+            });
+            props.onDelete();
+            setIsDialogOpen(false);
+          }
+        } catch (error) {
+          console.log("Error delete the quiz", error);
+          const axiosError = error as AxiosError<ApiResponse>;
+          toast({
+            variant: "destructive",
+            title: `Unable to delete the quiz ${props.name}`,
+            description: axiosError.response?.data.message,
+          });
+        }
       }
-    } else {
-      setVerificationErrorMessage("Invalid code, try again");
+    } catch (error) {
+      console.log("Error in verification", error);
+      const axiosError = error as AxiosError<ApiResponse>;
+      setVerificationErrorMessage(axiosError.response?.data.message);
+    } finally {
+      setIsVerificationLoading(false);
     }
   };
 
@@ -133,9 +155,12 @@ function QuizCard(props: QuizCardProps) {
                 <Button variant="ghost" onClick={handleShare}>
                   <Forward className="text-green-500" />
                 </Button>
-                <AlertDialog>
+                <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <AlertDialogTrigger asChild>
-                    <Button variant={"ghost"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() => setIsDialogOpen(true)}
+                    >
                       <Trash2 className="text-red-400" />
                     </Button>
                   </AlertDialogTrigger>
@@ -154,23 +179,31 @@ function QuizCard(props: QuizCardProps) {
                         delete this Quiz.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <div className="flex items-center md:space-x-4 space-x-2">
+                    <form
+                      onSubmit={form.handleSubmit(onQuizDelete)}
+                      className="flex items-center md:space-x-4 space-x-2"
+                    >
                       <Input
-                        value={code}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setCode(e.target.value)
-                        }
+                        {...form.register("code", {
+                          required: "Secrete code is required",
+                        })}
                         placeholder="Secrete Code"
                         className="placeholder:text-sm"
                       />
 
                       <Button
-                        onClick={() => onQuizDelete(code)}
+                        type="submit"
                         className="bg-red-500 hover:bg-red-600 text-xs md:text-sm"
                       >
-                        Delete
+                        {isVerificationLoading ? (
+                          <span>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          </span>
+                        ) : (
+                          <span className="">Delete</span>
+                        )}
                       </Button>
-                    </div>
+                    </form>
                     {verificationErrorMessage && (
                       <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
                         {verificationErrorMessage}

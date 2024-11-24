@@ -2,7 +2,7 @@
 import type { Quiz } from "@/model/Quiz.model";
 import React, { useCallback, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { ApiResponse } from "@/types/types";
+import { ApiResponse, VerificationCodeType } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -21,15 +21,22 @@ import { QuizCard } from "@/components/QuizCard";
 import Link from "next/link";
 import { useSpringValue, animated } from "@react-spring/web";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 function Quiz() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [code, setCode] = useState<string>("");
   const [verificationErrorMessage, setVerificationErrorMessage] = useState<
     string | undefined
   >();
+  const [isVerificationLoading, setIsVerificationLoading] =
+    useState<boolean>(false);
   const router = useRouter();
+  const form = useForm<VerificationCodeType>({
+    defaultValues: {
+      code: "",
+    },
+  });
 
   const opacity = useSpringValue(0, {
     config: {
@@ -57,13 +64,26 @@ function Quiz() {
     }
   }, []);
 
-  const onSubmit = () => {
+  const onSubmit = async (data: VerificationCodeType) => {
     // if the code is correct then push to create quiz page if wrong then show error message
+    setIsVerificationLoading(true);
+    try {
+      const response = await axios.post<ApiResponse>(
+        `/api/verify-secrete-key`,
+        {
+          secreteKey: data.code,
+        }
+      );
 
-    if (code === process.env.NEXT_PUBLIC_SHRITAM_SECRETE_KEY) {
-      router.push(`/quiz/create`);
-    } else {
-      setVerificationErrorMessage("Invalid code, try again");
+      if (response.data) {
+        router.push(`/quiz/create`);
+      }
+    } catch (error) {
+      console.log("Error in verification", error);
+      const axiosError = error as AxiosError<ApiResponse>;
+      setVerificationErrorMessage(axiosError.response?.data.message);
+    } finally {
+      setIsVerificationLoading(false);
     }
   };
 
@@ -90,7 +110,6 @@ function Quiz() {
                 src="/main_logo.svg"
                 width={240}
                 height={240}
-                layout="responsive"
                 alt="logo"
                 className="w-full h-full"
               />
@@ -145,22 +164,33 @@ function Quiz() {
                         code
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <div className="flex items-center space-x-2">
-                      <div className="grid flex-1 gap-2">
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="flex items-center space-x-2"
+                    >
+                      <div
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="grid flex-1 gap-2"
+                      >
                         <Input
                           id="link"
-                          value={code}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setCode(e.target.value)
-                          }
                           placeholder="Secrete Code"
                           className="placeholder:text-sm"
+                          {...form.register("code", {
+                            required: "Secrete code is required",
+                          })}
                         />
                       </div>
-                      <Button size="sm" className="px-3" onClick={onSubmit}>
-                        <span className="">Verify</span>
+                      <Button size="sm" className="px-3" type="submit">
+                        {isVerificationLoading ? (
+                          <span>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          </span>
+                        ) : (
+                          <span className="">Verify</span>
+                        )}
                       </Button>
-                    </div>
+                    </form>
                     {verificationErrorMessage && (
                       <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
                         {verificationErrorMessage}
@@ -188,7 +218,6 @@ function Quiz() {
               src="/main_logo.svg"
               width={240}
               height={240}
-              layout="responsive"
               alt="logo"
               className="w-full h-full"
             />
@@ -252,22 +281,33 @@ function Quiz() {
                       code
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <div className="flex items-center space-x-2">
-                    <div className="grid flex-1 gap-2">
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex items-center space-x-2"
+                  >
+                    <div
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="grid flex-1 gap-2"
+                    >
                       <Input
                         id="link"
-                        value={code}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setCode(e.target.value)
-                        }
                         placeholder="Secrete Code"
                         className="placeholder:text-sm"
+                        {...form.register("code", {
+                          required: "Verification code is required",
+                        })}
                       />
                     </div>
-                    <Button size="sm" className="px-3" onClick={onSubmit}>
-                      <span className="">Verify</span>
+                    <Button size="sm" className="px-3" type="submit">
+                      {isVerificationLoading ? (
+                        <span>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        </span>
+                      ) : (
+                        <span className="">Verify</span>
+                      )}
                     </Button>
-                  </div>
+                  </form>
                   {verificationErrorMessage && (
                     <p className="text-red-400 xl:text-sm md:text-xs text-[10px]">
                       {verificationErrorMessage}
