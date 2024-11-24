@@ -57,7 +57,6 @@ export default function Home() {
                 src="/main_logo.svg"
                 width={240}
                 height={240}
-                layout="responsive"
                 alt="logo"
                 className="w-full h-full"
               />
@@ -94,7 +93,7 @@ export default function Home() {
                 width={320}
                 height={320}
                 // className="w-full h-full"
-                layout="responsive"
+
                 alt="picture"
               />
             </span>

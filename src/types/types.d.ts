@@ -7,3 +7,7 @@ interface ApiResponse {
   quizzes?: Quiz[];
   originalLink?: string;
 }
+
+type VerificationCodeType = {
+  code: string;
+};

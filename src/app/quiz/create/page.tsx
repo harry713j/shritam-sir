@@ -89,7 +89,7 @@ function CreatePage() {
       const response = await axios.post<ApiResponse>(`/api/create-quiz`, {
         name: data.name,
         slug: data.slug,
-        subject: data.slug,
+        subject: data.subject,
         content: data.content,
       });
 
