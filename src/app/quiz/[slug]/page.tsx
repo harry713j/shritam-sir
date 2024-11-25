@@ -53,7 +53,6 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
         setQuiz(response.data.quiz);
       }
     } catch (error) {
-      console.error("Error get quiz", error);
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
         title: "Uh oh! Something went wrong",
@@ -161,12 +160,19 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                   )}
                 </div>
               ))}
-              <Button
-                type="submit"
-                className="md:text-base text-sm font-semibold capitalize mt-6"
-              >
-                Submit
-              </Button>
+              <div className="flex items-center space-x-4 mt-6">
+                <Button
+                  type="submit"
+                  className="md:text-base text-sm font-semibold capitalize"
+                >
+                  Submit
+                </Button>
+                {form.formState.errors.chosenOptions && (
+                  <p className="pl-2 font-light text-red-400 md:text-sm text-xs">
+                    Please attempt all the questions
+                  </p>
+                )}
+              </div>
             </form>
           </section>
         </>

@@ -10,12 +10,13 @@ export async function GET(
   const { id } = await params;
   await connectDb();
   try {
-    const redirectLink = `${process.env.PUBLIC_BASE_URL}/${id}`;
+    const redirectLink = `${process.env.BASE_URL}/${id}`;
     const quiz = await QuizModel.findOne({
       redirectLink: redirectLink,
     });
 
     if (quiz && quiz.originalLink) {
+      console.log(quiz.originalLink);
       return NextResponse.json(
         {
           success: true,
@@ -25,6 +26,7 @@ export async function GET(
         { status: 200 }
       );
     } else {
+      console.log("Else condition");
       return NextResponse.json(
         {
           success: false,
