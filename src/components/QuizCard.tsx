@@ -18,6 +18,7 @@ import axios, { AxiosError } from "axios";
 import { ApiResponse, VerificationCodeType } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { formatDate } from "@/utils/formatDateTime";
 
 type QuizCardProps = {
   className?: string;
@@ -26,6 +27,7 @@ type QuizCardProps = {
   slug: string;
   redirectLink: string;
   originalLink: string;
+  dateTime?: Date;
   onDelete: () => void;
 };
 
@@ -213,6 +215,13 @@ function QuizCard(props: QuizCardProps) {
                 </AlertDialog>
               </div>
             </section>
+            <div>
+              <p className="md:text-xs text-[10px] text-slate-700/50">
+                {"Released " +
+                  formatDate(new Date(props.dateTime?.toString() as string)) +
+                  " ago"}
+              </p>
+            </div>
           </section>
         </div>
       </CardContent>
