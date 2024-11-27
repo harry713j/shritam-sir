@@ -31,6 +31,7 @@ import { type Quiz } from "@/model/Quiz.model";
 import { Plus, Trash, Loader2, X, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSpringValue, animated } from "@react-spring/web";
+import { RichInput } from "@/components/RichInput";
 
 type ContentType = {
   question: string;
@@ -84,6 +85,7 @@ function CreatePage() {
   const onSubmit: SubmitHandler<CreateQuizType> = async (
     data: CreateQuizType
   ) => {
+    console.log(data);
     setIsLoading(true);
     try {
       const response = await axios.post<ApiResponse>(`/api/create-quiz`, {
@@ -266,13 +268,11 @@ function CreatePage() {
                         <Trash />
                       </Button>
                     </div>
-                    <Input
-                      id={`question.${index}`}
-                      placeholder="What is the question?"
-                      {...form.register(`content.${index}.question`, {
-                        required: "Question is required",
-                      })}
-                      className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
+
+                    <RichInput
+                      name={`content.${index}.question`}
+                      control={form.control}
+                      rules={{ required: "Question is required" }}
                     />
                   </span>
                   {form.formState.errors?.content?.[index]?.question && (
@@ -289,21 +289,16 @@ function CreatePage() {
                     {[0, 1, 2, 3].map((optIndex) => (
                       <div
                         key={optIndex}
-                        className="flex flex-col items-start space-y-1"
+                        className="w-2/5 flex flex-col items-start space-y-1"
                       >
-                        <Input
-                          placeholder={`Option ${String.fromCharCode(
-                            65 + optIndex
-                          )}`}
-                          {...form.register(
-                            `content.${index}.options.${optIndex}`,
-                            {
-                              required: `Option ${String.fromCharCode(
-                                65 + optIndex
-                              )} is required`,
-                            }
-                          )}
-                          className="placeholder:text-sm placeholder:md:text-[15px] opacity-80 placeholder:xl:text-base"
+                        <RichInput
+                          name={`content.${index}.options.${optIndex}`}
+                          control={form.control}
+                          rules={{
+                            required: `Option ${String.fromCharCode(
+                              65 + optIndex
+                            )} is required`,
+                          }}
                         />
                         {form.formState.errors?.content?.[index]?.options?.[
                           optIndex

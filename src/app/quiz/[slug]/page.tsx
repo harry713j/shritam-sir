@@ -13,6 +13,8 @@ import { useQuizResult } from "@/context/QuizContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSpringValue, animated } from "@react-spring/web";
+import "katex/dist/katex.min.css";
+import RenderHTMLWithMath from "@/components/RenderHtmlWithMath";
 
 type FormValues = {
   chosenOptions: string[];
@@ -118,9 +120,14 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                   key={`${index}`}
                   className="flex flex-col items-start md:space-y-3 space-y-2"
                 >
-                  <p className="text-slate-600 font-semibold md:text-base text-sm">{`${
-                    index + 1
-                  }. ${cont.question}?`}</p>
+                  <Label className="flex items-center space-x-2 text-slate-600 font-semibold md:text-base text-sm">
+                    {`${index + 1}. `}&nbsp;
+                    <RenderHTMLWithMath
+                      key={`${index}`}
+                      htmlString={cont.question}
+                    />
+                    ?
+                  </Label>
                   <Controller
                     name={`chosenOptions.${index}`}
                     control={form.control}
@@ -143,9 +150,14 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                             />
                             <Label
                               htmlFor={`${opt}-${i}`}
-                              className="capitalize md:text-sm text-xs text-slate-500 font-medium"
+                              className="md:text-sm text-xs text-slate-500 font-medium"
                             >
-                              {opt}
+                              {
+                                <RenderHTMLWithMath
+                                  key={`${opt}-${i}`}
+                                  htmlString={opt}
+                                />
+                              }
                             </Label>
                           </span>
                         ))}

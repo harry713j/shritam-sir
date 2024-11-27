@@ -34,6 +34,8 @@ export interface Quiz extends Document {
   redirectLink: string;
   originalLink: string;
   content: Array<Content>;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const quizSchema: Schema<Quiz> = new Schema(
