@@ -118,7 +118,7 @@ function Quiz() {
         </section>
         <div className="w-full flex items-center justify-between md:px-4 px-0">
           <h1 className="xl:text-3xl md:text-[27px] sm:text-2xl text-xl text-blue-950 font-bold capitalize xl:gap-12 md:gap-8 gap-6">
-            Active Quizzes
+            All Quiz
           </h1>
           <span className="flex items-center font-medium md:text-sm text-xs md:space-x-2 space-x-1 transition ease-linear text-sky-600 border-b border-sky-700/0 hover:border-sky-700/100 hover:text-sky-700">
             <MoveLeft className="w-4 h-4" />
@@ -209,7 +209,7 @@ function Quiz() {
   return (
     <animated.div
       style={{ opacity }}
-      className="w-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
+      className="w-full h-full flex flex-col items-start xl:px-20 xl:py-8 md:px-12 md:py-6 sm:px-8 sm:py-4 p-4 py-3 md:space-y-12 min-[700px]:space-y-11 sm:space-y-10 space-y-8 bg-gradient-to-br from-extralight-cyan to-extralight-sky"
     >
       <section>
         <span className="inline-block xl:w-[240px]  md:w-[200px] w-[180px] ">
@@ -226,8 +226,9 @@ function Quiz() {
       </section>
       <div className="w-full flex items-center justify-between md:px-4 px-0">
         <h1 className="xl:text-3xl md:text-[27px] sm:text-2xl text-xl text-blue-950 font-bold capitalize xl:gap-12 md:gap-8 gap-6">
-          Active Quizzes
+          All Quiz
         </h1>
+
         <span className="flex items-center font-medium md:text-sm text-xs md:space-x-2 space-x-1 transition ease-linear text-sky-600 border-b border-sky-700/0 hover:border-sky-700/100 hover:text-sky-700">
           <MoveLeft className="w-4 h-4" />
           <Link href={"/"}>Back to Home</Link>
@@ -249,6 +250,7 @@ function Quiz() {
                   name={quiz.name}
                   subject={quiz.subject}
                   slug={quiz.slug}
+                  dateTime={quiz.createdAt}
                   redirectLink={quiz.redirectLink}
                   originalLink={quiz.originalLink}
                   onDelete={() => handleDeleteQuiz(quiz.slug)}

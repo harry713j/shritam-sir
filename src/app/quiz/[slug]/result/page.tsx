@@ -12,6 +12,9 @@ import { useQuizResult } from "@/context/QuizContext";
 import { Content } from "@/model/Quiz.model";
 import Link from "next/link";
 import { useSpringValue, animated } from "@react-spring/web";
+import RenderHTMLWithMath from "@/components/RenderHtmlWithMath";
+import "katex/dist/katex.min.css";
+import { Label } from "@/components/ui/label";
 
 function ResultPage() {
   const { quiz, score, chosenOptions, calculateScore } = useQuizResult();
@@ -171,9 +174,11 @@ function ResultPage() {
             key={`${index}`}
             className="w-full flex flex-col items-start md:space-y-3 space-y-2"
           >
-            <p className="text-slate-600 font-semibold md:text-base text-sm">{`${
-              index + 1
-            }. ${cont.question}?`}</p>
+            <Label className="flex items-center space-x-2 text-slate-600 font-semibold md:text-base text-sm">
+              {`${index + 1}. `}&nbsp;
+              <RenderHTMLWithMath key={`${index}`} htmlString={cont.question} />
+              ?
+            </Label>
             <div className="w-full flex flex-col items-start md:pl-6 pl-4 space-y-1 ">
               {cont.options.map((opt: string, optIndex) => (
                 <span
@@ -204,17 +209,20 @@ function ResultPage() {
                       ? "c)"
                       : "d)"}
                   </p>
-                  <p
+                  <Label
                     className={`${
                       correctAnswer?.[index] === opt ||
                       (opt === chosenOptions[index] &&
                         chosenOptions[index] !== correctAnswer?.[index])
                         ? "text-slate-100"
                         : "text-slate-500"
-                    }  md:text-sm text-xs font-medium capitalize`}
+                    }  md:text-sm text-xs font-medium `}
                   >
-                    {opt}
-                  </p>
+                    <RenderHTMLWithMath
+                      key={`${opt}-${optIndex}`}
+                      htmlString={opt}
+                    />
+                  </Label>
                 </span>
               ))}
             </div>
