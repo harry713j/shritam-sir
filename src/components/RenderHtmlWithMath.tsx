@@ -22,6 +22,14 @@ const RenderHTMLWithMath: React.FC<RenderHTMLWithMathProps> = ({
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
 
+    if (!/<[a-z][\s\S]*>/i.test(html.trim())) {
+      // Input is plain text, wrap it in a paragraph or span
+      tempDiv.textContent = html;
+    } else {
+      // Input is structured HTML
+      tempDiv.innerHTML = html;
+    }
+
     const brTags = tempDiv.querySelectorAll("br");
     brTags.forEach((br) => br.remove());
 
@@ -43,9 +51,19 @@ const RenderHTMLWithMath: React.FC<RenderHTMLWithMathProps> = ({
     });
 
     if (appendText) {
-      const lastElement = tempDiv.lastChild as HTMLElement;
-      if (lastElement) {
+      const lastElement = tempDiv.lastChild;
+
+      if (lastElement instanceof HTMLElement) {
         lastElement.insertAdjacentHTML("beforeend", appendText);
+      } else if (lastElement) {
+        const wrapper = document.createElement("div");
+        wrapper.appendChild(lastElement);
+        wrapper.insertAdjacentHTML("beforeend", appendText);
+        tempDiv.appendChild(wrapper);
+      } else {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = appendText;
+        tempDiv.appendChild(wrapper);
       }
     }
 
