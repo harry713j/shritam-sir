@@ -85,7 +85,6 @@ function CreatePage() {
   const onSubmit: SubmitHandler<CreateQuizType> = async (
     data: CreateQuizType
   ) => {
-    console.log(data);
     setIsLoading(true);
     try {
       const response = await axios.post<ApiResponse>(`/api/create-quiz`, {
