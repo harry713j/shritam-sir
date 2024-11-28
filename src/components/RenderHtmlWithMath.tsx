@@ -4,10 +4,12 @@ import katex from "katex";
 
 interface RenderHTMLWithMathProps {
   htmlString: string;
+  appendText?: string;
 }
 
 const RenderHTMLWithMath: React.FC<RenderHTMLWithMathProps> = ({
   htmlString,
+  appendText = "",
 }) => {
   const [renderedContent, setRenderedContent] = useState<string>("");
 
@@ -19,6 +21,9 @@ const RenderHTMLWithMath: React.FC<RenderHTMLWithMathProps> = ({
   const renderLatexInHTML = (html: string) => {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
+
+    const brTags = tempDiv.querySelectorAll("br");
+    brTags.forEach((br) => br.remove());
 
     const latexElements = tempDiv.querySelectorAll("[data-type='math'][latex]");
 
@@ -36,6 +41,13 @@ const RenderHTMLWithMath: React.FC<RenderHTMLWithMathProps> = ({
         }
       }
     });
+
+    if (appendText) {
+      const lastElement = tempDiv.lastChild as HTMLElement;
+      if (lastElement) {
+        lastElement.insertAdjacentHTML("beforeend", appendText);
+      }
+    }
 
     return tempDiv.innerHTML;
   };
