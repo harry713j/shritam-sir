@@ -174,16 +174,19 @@ function ResultPage() {
             key={`${index}`}
             className="w-full flex flex-col items-start md:space-y-3 space-y-2"
           >
-            <Label className="flex items-center space-x-2 text-slate-600 font-semibold md:text-base text-sm">
-              {`${index + 1}. `}&nbsp;
-              <RenderHTMLWithMath key={`${index}`} htmlString={cont.question} />
-              ?
+            <Label className="flex items-start space-x-2 text-slate-600 font-semibold md:text-base text-sm">
+              <span>{`${index + 1}. `}</span>
+              <RenderHTMLWithMath
+                key={`${index}`}
+                htmlString={`${cont.question}`}
+                appendText="?"
+              />
             </Label>
             <div className="w-full flex flex-col items-start md:pl-6 pl-4 space-y-1 ">
               {cont.options.map((opt: string, optIndex) => (
                 <span
                   key={`${opt}-${optIndex}`}
-                  className={`w-full flex items-center space-x-2 p-1 ${
+                  className={`w-full flex items-start space-x-2 p-1 ${
                     correctAnswer?.[index] === opt ? "bg-green-400 " : ""
                   } ${
                     opt === chosenOptions[index] &&

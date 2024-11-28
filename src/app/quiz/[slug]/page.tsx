@@ -120,13 +120,13 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                   key={`${index}`}
                   className="flex flex-col items-start md:space-y-3 space-y-2"
                 >
-                  <Label className="flex items-center space-x-2 text-slate-600 font-semibold md:text-base text-sm">
-                    {`${index + 1}. `}&nbsp;
+                  <Label className="flex items-start space-x-2 text-slate-600 font-semibold md:text-base text-sm">
+                    <span>{`${index + 1}. `}</span>
                     <RenderHTMLWithMath
                       key={`${index}`}
-                      htmlString={cont.question}
+                      htmlString={`${cont.question}`}
+                      appendText="?"
                     />
-                    ?
                   </Label>
                   <Controller
                     name={`chosenOptions.${index}`}
@@ -141,7 +141,7 @@ function SingleQuiz({ params }: { params: Promise<{ slug: string }> }) {
                         {cont.options.map((opt: string, i) => (
                           <span
                             key={`${opt}-${i}`}
-                            className="flex items-center space-x-2"
+                            className="flex items-start space-x-2"
                           >
                             <RadioGroupItem
                               value={opt}
